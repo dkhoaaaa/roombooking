@@ -1,0 +1,105 @@
+/* styles/AdminSupport.module.css */
+
+.container {
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .header {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .sessionList {
+    width: 30%;
+    border-right: 1px solid #ddd;
+    padding-right: 10px;
+    overflow-y: auto;
+    max-height: 400px;
+  }
+  
+  .sessionButton {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .sessionButton:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .chatContainer {
+    flex: 1;
+    padding-left: 10px;
+  }
+  
+  .chatBox {
+    border: 1px solid #ddd;
+    padding: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+  }
+  
+  .message {
+    margin: 5px 0;
+  }
+  
+  .sender {
+    font-weight: bold;
+  }
+  
+  .inputContainer {
+    display: flex;
+    align-items: center;
+  }
+  
+  .input {
+    flex: 1;
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .button:hover {
+    background-color: #0056b3;
+  }
+  
+  .endSessionButton {
+    padding: 8px 16px;
+    margin-left: 10px;
+    background-color: #dc3545;
+    color: white;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .endSessionButton:hover {
+    background-color: #c82333;
+  }
+  
