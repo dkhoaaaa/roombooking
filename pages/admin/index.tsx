@@ -60,7 +60,7 @@ const AdminDashboard = () => {
     return () => unsubscribeCheckIns();
   }, []);
 
-  const handleInputChange = (field: keyof Room, value: any) => {
+  const handleInputChange = (field: keyof Room, value: Room[keyof Room]) => {
     if (!editableRoom) return;
     setEditableRoom({ ...editableRoom, [field]: value });
   };

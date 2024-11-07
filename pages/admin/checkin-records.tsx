@@ -30,7 +30,7 @@ const CheckInRecords = () => {
     return () => unsubscribeCheckIns();
   }, []);
 
-  const handleCheckOut = async (checkInId: string, benches: string[]) => {
+  const handleCheckOut = async (checkInId: string) => {
     try {
       const checkOutTime = new Date().toISOString();
 
@@ -64,7 +64,7 @@ const CheckInRecords = () => {
                 <p><strong>Check-Out Time:</strong> {new Date(checkIn.checkOutTime!).toLocaleString()}</p>
               ) : (
                 <button
-                  onClick={() => handleCheckOut(checkIn.id, checkIn.benches)}
+                  onClick={() => handleCheckOut(checkIn.id)}
                   className={styles.checkOutButton}
                 >
                   Check Out
