@@ -2,25 +2,25 @@
 
 .container {
     padding: 20px;
-    max-width: 900px;
+    max-width: 1200px;
     margin: 0 auto;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
   }
   
   .header {
     font-size: 24px;
     font-weight: bold;
-    text-align: center;
     margin-bottom: 20px;
+    text-align: center;
   }
   
   .sessionList {
     width: 30%;
     border-right: 1px solid #ddd;
-    padding-right: 10px;
+    padding-right: 15px;
     overflow-y: auto;
-    max-height: 400px;
+    max-height: 500px;
   }
   
   .sessionButton {
@@ -40,7 +40,7 @@
   
   .chatContainer {
     flex: 1;
-    padding-left: 10px;
+    padding-left: 15px;
   }
   
   .chatBox {
@@ -64,6 +64,7 @@
   .inputContainer {
     display: flex;
     align-items: center;
+    margin-bottom: 15px;
   }
   
   .input {
@@ -101,5 +102,22 @@
   
   .endSessionButton:hover {
     background-color: #c82333;
+  }
+  
+  .videoCallContainer {
+    margin-top: 20px;
+  }
+  
+  .videoContainer {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+  }
+  
+  .video {
+    width: 45%;
+    height: auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
   }
   

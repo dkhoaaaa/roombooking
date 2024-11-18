@@ -1,9 +1,13 @@
-// pages/support.tsx
-import { useState, useEffect, useRef } from 'react';
-import { db } from '../lib/firebaseConfig';
-import { collection, addDoc, onSnapshot, doc, updateDoc, getDoc } from 'firebase/firestore';
-import SimplePeer from 'simple-peer';
-import styles from '../styles/Support.module.css';
+"use client";
+
+import { useEffect, useState } from "react";
+import dynamic from 'next/dynamic'; // Import dynamic for client-side-only components
+import styles from "../styles/Support.module.css";
+
+// Dynamically import the Call component, ensuring it's client-side only
+const Call = dynamic(() => import('../components/Call'), { ssr: false });
+
+const APP_ID = "5117c840eeef4bf4a4cc9493c024d732"; // Replace with your actual Agora App ID
 
 interface Message {
   id?: string;
@@ -13,135 +17,57 @@ interface Message {
 }
 
 const Support = () => {
-  const [userName, setUserName] = useState<string>('');
+  const [userName, setUserName] = useState<string>("");
   const [sessionID, setSessionID] = useState<string | null>(null);
-  const [message, setMessage] = useState<string>('');
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [isVideoCallActive, setIsVideoCallActive] = useState(false);
-  const userVideo = useRef<HTMLVideoElement>(null);
-  const adminVideo = useRef<HTMLVideoElement>(null);
-  const peerRef = useRef<SimplePeer.Instance | null>(null);
+  const [channelName, setChannelName] = useState<string>("");
+  const [isClient, setIsClient] = useState<boolean>(false);
 
-  // Firestore signaling references
-  const sessionRef = sessionID ? doc(db, 'webrtcSessions', sessionID) : null;
-
+  // Set client-side flag when the component mounts
   useEffect(() => {
-    if (sessionID) {
-      const messagesCollection = collection(db, `supportSessions/${sessionID}/messages`);
-      const unsubscribe = onSnapshot(messagesCollection, (snapshot) => {
-        const chatMessages = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        })) as Message[];
-        setMessages(chatMessages.sort((a, b) => a.timestamp - b.timestamp));
-      });
-      return () => unsubscribe();
+    setIsClient(true);
+  }, []);
+
+  const startSession = () => {
+    if (!userName.trim()) {
+      alert("Please enter your name to start the chat.");
+      return;
     }
-  }, [sessionID]);
 
-  const startSession = async () => {
-    if (!userName.trim()) return alert('Please enter your name to start the chat.');
-
-    const sessionRef = await addDoc(collection(db, 'supportSessions'), {
-      userName,
-      createdAt: new Date(),
-      isActive: true,
-    });
-    setSessionID(sessionRef.id);
+    // Generating a unique session ID and channel name
+    setSessionID("session_" + new Date().getTime());
+    setChannelName("support_channel_" + new Date().getTime());
   };
 
-  const sendMessage = async () => {
-    if (message.trim() === '' || !sessionID) return;
-
-    const newMessage: Message = {
-      text: message,
-      sender: userName,
-      timestamp: new Date(),
-    };
-
-    await addDoc(collection(db, `supportSessions/${sessionID}/messages`), newMessage);
-    setMessage('');
-  };
-
-  const startVideoCall = async () => {
-    setIsVideoCallActive(true);
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-    userVideo.current!.srcObject = stream;
-
-    // Initialize SimplePeer for user (initiator)
-    peerRef.current = new SimplePeer({
-      initiator: true,
-      trickle: false,
-      stream,
-    });
-
-    // When peer connection is established, set up signaling
-    peerRef.current.on('signal', async (data) => {
-      await updateDoc(sessionRef!, { offer: JSON.stringify(data) });
-    });
-
-    // Listen for answer from Firestore
-    onSnapshot(sessionRef!, (snapshot) => {
-      const data = snapshot.data();
-      if (data?.answer && peerRef.current) {
-        peerRef.current.signal(JSON.parse(data.answer));
-      }
-    });
-
-    // Receive admin stream
-    peerRef.current.on('stream', (stream) => {
-      adminVideo.current!.srcObject = stream;
-    });
-  };
+  if (!sessionID) {
+    return (
+      <div className={styles.container}>
+        <h1 className={styles.header}>Welcome to Support Chat</h1>
+        <input
+          type="text"
+          placeholder="Enter your name"
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
+          className={styles.input}
+        />
+        <button onClick={startSession} className={styles.button}>
+          Start Chat
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.header}>Support Chat</h1>
-      {sessionID ? (
-        <>
-          <div className={styles.chatBox}>
-            {messages.map((msg) => (
-              <p key={msg.id}>
-                <strong>{msg.sender}:</strong> {msg.text}
-              </p>
-            ))}
-          </div>
-          <input
-            type="text"
-            placeholder="Type a message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            className={styles.input}
-          />
-          <button onClick={sendMessage} className={styles.button}>
-            Send Message
-          </button>
-          <button onClick={startVideoCall} className={styles.button}>
-            Start Video Call
-          </button>
-
-          {/* Video elements */}
-          {isVideoCallActive && (
-            <div className={styles.videoContainer}>
-              <video ref={userVideo} autoPlay muted className={styles.video} />
-              <video ref={adminVideo} autoPlay className={styles.video} />
-            </div>
-          )}
-        </>
-      ) : (
-        <>
-          <input
-            type="text"
-            placeholder="Enter your name"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-            className={styles.input}
-          />
-          <button onClick={startSession} className={styles.button}>
-            Start Chat
-          </button>
-        </>
-      )}
+      <h1 className={styles.header}>Support Video Call</h1>
+      {isClient && <Call appId={APP_ID} channelName={channelName} />}
+      <div className="fixed z-10 bottom-0 left-0 right-0 flex justify-center pb-4">
+        <a
+          className="px-5 py-3 text-base font-medium text-center text-white bg-red-400 rounded-lg hover:bg-red-500 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900 w-40"
+          href="/"
+        >
+          End Call
+        </a>
+      </div>
     </div>
   );
 };
