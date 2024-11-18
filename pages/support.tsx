@@ -5,7 +5,6 @@ import dynamic from 'next/dynamic'; // Import dynamic for client-side-only compo
 import styles from "../styles/Support.module.css";
 
 // Dynamically import the Call component, ensuring it's client-side only
-const Call = dynamic(() => import('../components/Call'), { ssr: false });
 
 const APP_ID = "5117c840eeef4bf4a4cc9493c024d732"; // Replace with your actual Agora App ID
 
@@ -59,7 +58,6 @@ const Support = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.header}>Support Video Call</h1>
-      {isClient && <Call appId={APP_ID} channelName={channelName} />}
       <div className="fixed z-10 bottom-0 left-0 right-0 flex justify-center pb-4">
         <a
           className="px-5 py-3 text-base font-medium text-center text-white bg-red-400 rounded-lg hover:bg-red-500 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900 w-40"
