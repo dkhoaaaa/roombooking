@@ -18,3 +18,12 @@ button {
 button:hover {
   background-color: #005bb5;
 }
+
+.str-chat__channel .str-chat__container {
+  height: 80vh !important;
+  flex-direction: column;
+}
+.str-chat__list {
+  overflow-y: scroll !important;
+}
+
