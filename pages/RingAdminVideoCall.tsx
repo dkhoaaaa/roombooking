@@ -39,7 +39,9 @@ const RingAdminVideoCall = () => {
 
     useEffect(() => {
         if (userName) {
-            const userIdGenerated = userName.trim().toLowerCase().replace(/\s+/g, "_");
+            // Ensure userName is treated as a string
+            const userNameString = Array.isArray(userName) ? userName[0] : userName;
+            const userIdGenerated = userNameString.trim().toLowerCase().replace(/\s+/g, "_");
             setUserId(userIdGenerated);
 
             const initStream = async () => {
@@ -49,7 +51,7 @@ const RingAdminVideoCall = () => {
                     await chatClient.connectUser(
                         {
                             id: userIdGenerated,
-                            name: userName as string,
+                            name: userNameString,
                         },
                         chatClient.devToken(userIdGenerated)
                     );
@@ -57,7 +59,7 @@ const RingAdminVideoCall = () => {
                     // Initialize Stream Video client
                     const videoClient = new StreamVideoClient({
                         apiKey,
-                        user: { id: userIdGenerated, name: userName as string },
+                        user: { id: userIdGenerated, name: userNameString },
                         tokenProvider: () => chatClient.devToken(userIdGenerated),
                     });
 
