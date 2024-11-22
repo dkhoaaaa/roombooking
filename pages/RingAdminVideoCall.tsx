@@ -60,7 +60,7 @@ const RingAdminVideoCall = () => {
                     const videoClient = new StreamVideoClient({
                         apiKey,
                         user: { id: userIdGenerated, name: userNameString },
-                        tokenProvider: () => chatClient.devToken(userIdGenerated),
+                        tokenProvider: async () => chatClient.devToken(userIdGenerated), // Fixed tokenProvider
                     });
 
                     setClient(videoClient);
