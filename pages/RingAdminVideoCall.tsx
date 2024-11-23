@@ -73,7 +73,7 @@ const CallStateHandler: React.FC<CallStateHandlerProps> = ({ call }) => {
             return (
                 <div>
                     <SpeakerLayout />
-                    <CallControls />
+                    <CallControls onLeave={() => call.endCall()}/>
                 </div>
             );
         case CallingState.RECONNECTING:

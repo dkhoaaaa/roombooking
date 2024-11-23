@@ -95,8 +95,8 @@ const AdminSupport = () => {
   return (
     <div style={{ display: "flex", height: "95vh", marginTop: "2.5vh" }}>
       <div className={styles.container}>
-        <Chat client={chatClient} className={styles.container}>
-        <div style={{ width: "25vw" }}><ChannelList filters={filters} sort={sort} /></div>
+        <Chat client={chatClient}>
+        <div style={{ width: "25vw" }}><ChannelList filters={filters} /></div>
           <Channel>
             <Window>
               <div style={{ width: "75vw" }}>
@@ -105,7 +105,7 @@ const AdminSupport = () => {
                   className="str-chat__channel str-chat__container"
                   style={{ overflowY: "hidden" }}
                 >
-                  <MessageList style={{ flexGrow: 1, overflowY: "auto" }} />
+                  <MessageList  />
                   <MessageInput focus />
                 </div>
               </div>
@@ -212,7 +212,7 @@ const MyIncomingCallUI = ({ call }) => {
         }}
       >
         <SpeakerLayout />
-        <CallControls />
+        <CallControls onLeave={() => call.endCall()}/>
       </div>
     );
   }
