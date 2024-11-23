@@ -180,7 +180,7 @@ const ClientSupport = () => {
                 overflowY: "hidden",
               }}
             >
-              <MessageList style={{ flexGrow: 1, overflowY: "auto" }} />
+              <MessageList />
               <MessageInput focus />
             </div>
           </Window>
