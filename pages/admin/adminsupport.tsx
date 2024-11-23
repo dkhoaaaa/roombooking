@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router"; // Import useRouter for navigation
 import { StreamChat } from "stream-chat";
 import {
   Chat,
@@ -30,7 +31,6 @@ const apiKey = "ye2nkek6ste4";
 const adminUserName = "Admin Support";
 const adminUserId = "admin";
 
-// Token provider function with error handling
 const tokenProvider = async (userId: string): Promise<string> => {
   try {
     const response = await fetch(
@@ -53,7 +53,7 @@ const tokenProvider = async (userId: string): Promise<string> => {
 const AdminSupport = () => {
   const [chatClient, setChatClient] = useState<StreamChat | null>(null);
   const [videoClient, setVideoClient] = useState<StreamVideoClient | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const router = useRouter(); // Initialize useRouter
 
   useEffect(() => {
     const initStream = async () => {
@@ -77,29 +77,13 @@ const AdminSupport = () => {
         setVideoClient(videoClientInstance);
       } catch (err) {
         console.error("Error initializing Stream clients:", err);
-        setError("Failed to initialize admin support. Please try again later.");
+        // Redirect to the error page
+        router.push("/admin/adminsupport");
       }
     };
 
     initStream();
-
-    return () => {
-      chatClient?.disconnectUser().catch((err) => {
-        console.error("Error disconnecting chat client:", err);
-      });
-      videoClient?.disconnectUser().catch((err) => {
-        console.error("Error disconnecting video client:", err);
-      });
-    };
-  }, []);
-
-  if (error) {
-    return (
-      <div style={{ color: "red", textAlign: "center", marginTop: "20px" }}>
-        {error}
-      </div>
-    );
-  }
+  }, [router]); // Include router in dependencies
 
   if (!chatClient || !videoClient) {
     return <div style={{ textAlign: "center", marginTop: "20px" }}>Loading admin support...</div>;
@@ -109,13 +93,13 @@ const AdminSupport = () => {
   const sort = { last_message_at: -1 };
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
+    <div style={{ display: "flex", height: "95vh", marginTop: "2.5vh" }}>
       <div className={styles.container}>
         <Chat client={chatClient} className={styles.container}>
-          <ChannelList filters={filters} sort={sort} />
+        <div style={{ width: "25vw" }}><ChannelList filters={filters} sort={sort} /></div>
           <Channel>
             <Window>
-              <div style={{ width: "70vw" }}>
+              <div style={{ width: "75vw" }}>
                 <ChannelHeader />
                 <div
                   className="str-chat__channel str-chat__container"
@@ -186,15 +170,9 @@ const MyIncomingCallUI = ({ call }) => {
   const { useCallCallingState } = useCallStateHooks();
   const callingState = useCallCallingState();
 
-  const handleJoinCall = async () => {
-    try {
-      console.log("Joining the new call...");
-      await call.join();
-      console.log("Joined the new call.");
-    } catch (error) {
-      console.error("Error handling call transition:", error);
-    }
-  };
+  if (callingState === CallingState.LEFT || callingState === CallingState.OFFLINE) {
+    return null; // Avoid rendering UI or performing actions for inactive calls
+  }
 
   if (callingState === CallingState.RINGING) {
     return (
@@ -216,28 +194,30 @@ const MyIncomingCallUI = ({ call }) => {
     );
   }
 
-  return (
-    <div
-      style={{
-        position: "fixed",
-        top: "50%",
-        left: "50%",
-        width: "100%",
-        height: "100%",
-        transform: "translate(-50%, -50%)",
-        backgroundColor: "rgba(255, 255, 255, 0.9)",
-        padding: "20px",
-        borderRadius: "8px",
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-        zIndex: 1000,
-      }}
-    >
-      <SpeakerLayout />
-      <CallControls />
-    </div>
-  );
+  if (callingState === CallingState.JOINED) {
+    return (
+      <div
+        style={{
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          width: "100%",
+          height: "100%",
+          transform: "translate(-50%, -50%)",
+          backgroundColor: "rgba(255, 255, 255, 0.9)",
+          padding: "20px",
+          borderRadius: "8px",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+          zIndex: 1000,
+        }}
+      >
+        <SpeakerLayout />
+        <CallControls />
+      </div>
+    );
+  }
+
+  return null; // Do not render UI for other states
 };
-
-
 
 export default AdminSupport;

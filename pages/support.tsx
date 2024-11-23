@@ -38,7 +38,7 @@ const ClientSupport = () => {
 
           // Disconnect any existing user to prevent conflicts
           if (client) {
-            await client.disconnect();
+            await client.disconnectUser();
           }
 
           // Connect the new user
@@ -66,7 +66,7 @@ const ClientSupport = () => {
       initStream();
 
       return () => {
-        client?.disconnect();
+        client?.disconnectUser();
       };
     }
   }, [userId, userName]);
