@@ -23,6 +23,7 @@ import {
   SpeakerLayout,
   CallControls,
   useCallStateHooks,
+  Call, // Assuming this type exists
 } from "@stream-io/video-react-sdk";
 import "@stream-io/video-react-sdk/dist/css/styles.css";
 import styles from "../../styles/AdminSupport.module.css";
@@ -53,7 +54,7 @@ const tokenProvider = async (userId: string): Promise<string> => {
 const AdminSupport = () => {
   const [chatClient, setChatClient] = useState<StreamChat | null>(null);
   const [videoClient, setVideoClient] = useState<StreamVideoClient | null>(null);
-  const router = useRouter(); // Initialize useRouter
+  const router = useRouter();
 
   useEffect(() => {
     const initStream = async () => {
@@ -77,13 +78,12 @@ const AdminSupport = () => {
         setVideoClient(videoClientInstance);
       } catch (err) {
         console.error("Error initializing Stream clients:", err);
-        // Redirect to the error page
         router.push("/admin/adminsupport");
       }
     };
 
     initStream();
-  }, [router]); // Include router in dependencies
+  }, [router]);
 
   if (!chatClient || !videoClient) {
     return <div style={{ textAlign: "center", marginTop: "20px" }}>Loading admin support...</div>;
@@ -96,7 +96,9 @@ const AdminSupport = () => {
     <div style={{ display: "flex", height: "95vh", marginTop: "2.5vh" }}>
       <div className={styles.container}>
         <Chat client={chatClient}>
-        <div style={{ width: "25vw" }}><ChannelList filters={filters} /></div>
+          <div style={{ width: "25vw" }}>
+            <ChannelList filters={filters} />
+          </div>
           <Channel>
             <Window>
               <div style={{ width: "75vw" }}>
@@ -105,7 +107,7 @@ const AdminSupport = () => {
                   className="str-chat__channel str-chat__container"
                   style={{ overflowY: "hidden" }}
                 >
-                  <MessageList  />
+                  <MessageList />
                   <MessageInput focus />
                 </div>
               </div>
@@ -166,12 +168,16 @@ const MyIncomingCallsUI = () => {
   );
 };
 
-const MyIncomingCallUI = ({ call }) => {
+interface MyIncomingCallUIProps {
+  call: Call; // Replace with a specific type if `Call` doesn't exist
+}
+
+const MyIncomingCallUI: React.FC<MyIncomingCallUIProps> = ({ call }) => {
   const { useCallCallingState } = useCallStateHooks();
   const callingState = useCallCallingState();
 
   if (callingState === CallingState.LEFT || callingState === CallingState.OFFLINE) {
-    return null; // Avoid rendering UI or performing actions for inactive calls
+    return null;
   }
 
   if (callingState === CallingState.RINGING) {
@@ -212,12 +218,12 @@ const MyIncomingCallUI = ({ call }) => {
         }}
       >
         <SpeakerLayout />
-        <CallControls onLeave={() => call.endCall()}/>
+        <CallControls onLeave={() => call.endCall()} />
       </div>
     );
   }
 
-  return null; // Do not render UI for other states
+  return null;
 };
 
 export default AdminSupport;
