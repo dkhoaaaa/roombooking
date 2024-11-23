@@ -112,8 +112,10 @@ const RingAdminVideoCall: React.FC = () => {
                     const videoClient = new StreamVideoClient({
                         apiKey,
                         user: { id: userIdGenerated, name: userNameString },
-                        tokenProvider: () => chatClient.devToken(userIdGenerated),
-                    });
+                        tokenProvider: async () => {
+                            return chatClient.devToken(userIdGenerated);
+                        },
+                    });                    
 
                     setClient(videoClient);
                 } catch (error) {
