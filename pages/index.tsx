@@ -65,6 +65,32 @@ const Home = () => {
   if (loading) return <p className={styles.loading}>Loading...</p>;
 
   return (
+    <div>
+      {/* Top Banner */}
+      <div
+        className="top-banner-container"
+        style={{
+          display: "flex",
+          margin: "0 auto",
+          maxWidth: "800px",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "10px",
+        }}
+      >
+        <img
+          className="top-banner-image"
+          src="https://people.ece.ubc.ca/~haileynadine/assets/UBC.png"
+          alt="UBC Logo"
+          style={{ height: "75px", marginRight: "20px" }}
+        />
+        <img
+          className="top-banner-image"
+          src="https://people.ece.ubc.ca/~haileynadine/assets/ECE.png"
+          alt="ECE Logo"
+          style={{ height: "75px" }}
+        />
+      </div>
     <div className={styles.container}>
       <h1 className={styles.header}>Room Information</h1>
 
@@ -102,6 +128,7 @@ const Home = () => {
           Support
         </button>
       </div>
+    </div>
     </div>
   );
 };

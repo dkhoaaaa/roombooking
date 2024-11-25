@@ -93,7 +93,32 @@ const AdminSupport = () => {
   const sort = { last_message_at: -1 };
 
   return (
-    <div style={{ display: "flex", height: "95vh", marginTop: "2.5vh" }}>
+    <div>
+      {/* Top Banner */}
+      <div
+        className="top-banner-container"
+        style={{
+          display: "flex",
+          maxWidth: "97vw",
+          margin: "0 auto",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "10px",
+        }}
+      >
+        <img
+          className="top-banner-image"
+          src="https://people.ece.ubc.ca/~haileynadine/assets/UBC.png"
+          alt="UBC Logo"
+          style={{ height: "50px", marginRight: "20px" }}
+        />
+        <img
+          className="top-banner-image"
+          src="https://people.ece.ubc.ca/~haileynadine/assets/ECE.png"
+          alt="ECE Logo"
+          style={{ height: "50px" }}
+        />
+      </div>
       <div className={styles.container}>
         <Chat client={chatClient}>
           <div style={{ width: "25vw" }}>
@@ -112,7 +137,6 @@ const AdminSupport = () => {
                 </div>
               </div>
             </Window>
-            <Thread />
           </Channel>
         </Chat>
       </div>
