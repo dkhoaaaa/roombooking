@@ -91,6 +91,10 @@ const ClientSupport = () => {
     router.push(`/RingAdminVideoCall?userName=${encodeURIComponent(userName)}`);
   };
 
+  const goBack = () => {
+    router.push("/");
+  };
+
   if (!userId) {
     return (
       <div
@@ -134,6 +138,21 @@ const ClientSupport = () => {
           }}
         >
           Start Chat
+        </button>
+        <button
+          onClick={goBack}
+          style={{
+            padding: "10px 20px",
+            backgroundColor: "#6c757d",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+            fontSize: "16px",
+            marginTop: "10px",
+          }}
+        >
+          Back to Home
         </button>
       </div>
     );
@@ -203,9 +222,24 @@ const ClientSupport = () => {
             borderRadius: "4px",
             cursor: "pointer",
             fontSize: "16px",
+            marginRight: "10px",
           }}
         >
           Call Admin
+        </button>
+        <button
+          onClick={goBack}
+          style={{
+            padding: "10px 20px",
+            backgroundColor: "#6c757d",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+            fontSize: "16px",
+          }}
+        >
+          Back to Home
         </button>
       </div>
     </div>
