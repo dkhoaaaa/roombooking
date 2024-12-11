@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/router"; // Import useRouter for navigation
 import { StreamChat } from "stream-chat";
 import {
   Chat,
@@ -24,6 +24,7 @@ import {
   SpeakerLayout,
   CallControls,
   useCallStateHooks,
+  Call, // Assuming this type exists
 } from "@stream-io/video-react-sdk";
 import "@stream-io/video-react-sdk/dist/css/styles.css";
 import styles from "../../styles/AdminSupport.module.css";
@@ -120,18 +121,15 @@ const AdminSupport = () => {
         />
       </div>
       <div className={styles.container}>
-        
         <Chat client={chatClient}>
           <div style={{ width: "25vw" }}>
             <ChannelList filters={filters} />
           </div>
           <Channel>
             <Window>
-              <div style={{ width: "75vw", height: "60vh"}}>
-                <div style={{display: "flex", alignItems: "center", justifyContent: "space-between",}}>
-                  <ChannelHeader />
-                  <DeleteChannelButton />
-                </div>
+              <div style={{ width: "75vw" }}>
+                <ChannelHeader />
+                <DeleteChannelButton /> {/* Add the delete button here */}
                 <div
                   className="str-chat__channel str-chat__container"
                   style={{ overflowY: "hidden" }}
@@ -139,9 +137,7 @@ const AdminSupport = () => {
                   <MessageList />
                   <MessageInput focus />
                 </div>
-                
               </div>
-              
             </Window>
           </Channel>
         </Chat>
@@ -233,7 +229,11 @@ const MyIncomingCallsUI = () => {
   );
 };
 
-const MyIncomingCallUI = ({ call }) => {
+interface MyIncomingCallUIProps {
+  call: Call; // Replace with a specific type if `Call` doesn't exist
+}
+
+const MyIncomingCallUI: React.FC<MyIncomingCallUIProps> = ({ call }) => {
   const { useCallCallingState } = useCallStateHooks();
   const callingState = useCallCallingState();
 
