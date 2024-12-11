@@ -215,7 +215,7 @@ const ClientSupport = () => {
                   }}
                 >
                   <MessageList />
-                  <MessageInput focus />
+                  <MessageInput focus audioRecordingEnabled={true}/>
                 </div>
               </Window>
             </Channel>

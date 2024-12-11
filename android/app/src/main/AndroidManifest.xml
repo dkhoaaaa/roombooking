@@ -31,5 +31,40 @@
 
     <!-- Permissions -->
 
+    <!-- Requesting Internet access -->
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Requesting Network State -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Requesting WiFi State -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <!-- Requesting Camera access -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- Requesting Microphone access -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+
+    <!-- Requesting Read and Write External Storage (for saving files or photos) -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!-- Requesting Fine and Coarse Location (if you need location services) -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- Requesting Permission to Vibrate -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- Requesting Bluetooth Permissions -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <!-- Requesting Phone State (if you need to handle phone calls or identify the device) -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <!-- Requesting permission to manage network sockets -->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 </manifest>

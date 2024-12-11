@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router"; // Import useRouter for navigation
+import { useRouter } from "next/router";
 import { StreamChat } from "stream-chat";
 import {
   Chat,
@@ -10,6 +10,7 @@ import {
   MessageList,
   Thread,
   Window,
+  useChannelStateContext,
 } from "stream-chat-react";
 import "stream-chat-react/dist/css/v2/index.css";
 import {
@@ -23,7 +24,6 @@ import {
   SpeakerLayout,
   CallControls,
   useCallStateHooks,
-  Call, // Assuming this type exists
 } from "@stream-io/video-react-sdk";
 import "@stream-io/video-react-sdk/dist/css/styles.css";
 import styles from "../../styles/AdminSupport.module.css";
@@ -120,14 +120,18 @@ const AdminSupport = () => {
         />
       </div>
       <div className={styles.container}>
+        
         <Chat client={chatClient}>
           <div style={{ width: "25vw" }}>
             <ChannelList filters={filters} />
           </div>
           <Channel>
             <Window>
-              <div style={{ width: "75vw" }}>
-                <ChannelHeader />
+              <div style={{ width: "75vw", height: "60vh"}}>
+                <div style={{display: "flex", alignItems: "center", justifyContent: "space-between",}}>
+                  <ChannelHeader />
+                  <DeleteChannelButton />
+                </div>
                 <div
                   className="str-chat__channel str-chat__container"
                   style={{ overflowY: "hidden" }}
@@ -135,7 +139,9 @@ const AdminSupport = () => {
                   <MessageList />
                   <MessageInput focus />
                 </div>
+                
               </div>
+              
             </Window>
           </Channel>
         </Chat>
@@ -151,6 +157,41 @@ const AdminSupport = () => {
         </StreamVideo>
       </div>
     </div>
+  );
+};
+
+const DeleteChannelButton = () => {
+  const { channel } = useChannelStateContext();
+
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this channel? This action cannot be undone."
+    );
+    if (!confirmDelete) return;
+
+    try {
+      await channel.delete();
+      alert("Channel deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting channel:", error);
+      alert("Failed to delete the channel. Please try again.");
+    }
+  };
+
+  return (
+    <button
+      style={{
+        backgroundColor: "#ff4d4f",
+        color: "white",
+        border: "none",
+        padding: "10px 15px",
+        borderRadius: "5px",
+        cursor: "pointer",
+      }}
+      onClick={handleDelete}
+    >
+      Delete Channel
+    </button>
   );
 };
 
@@ -192,11 +233,7 @@ const MyIncomingCallsUI = () => {
   );
 };
 
-interface MyIncomingCallUIProps {
-  call: Call; // Replace with a specific type if `Call` doesn't exist
-}
-
-const MyIncomingCallUI: React.FC<MyIncomingCallUIProps> = ({ call }) => {
+const MyIncomingCallUI = ({ call }) => {
   const { useCallCallingState } = useCallStateHooks();
   const callingState = useCallCallingState();
 
