@@ -121,15 +121,18 @@ const AdminSupport = () => {
         />
       </div>
       <div className={styles.container}>
+        
         <Chat client={chatClient}>
           <div style={{ width: "25vw" }}>
             <ChannelList filters={filters} />
           </div>
           <Channel>
             <Window>
-              <div style={{ width: "75vw" }}>
-                <ChannelHeader />
-                <DeleteChannelButton /> {/* Add the delete button here */}
+              <div style={{ width: "75vw", height: "60vh"}}>
+                <div style={{display: "flex", alignItems: "center", justifyContent: "space-between",}}>
+                  <ChannelHeader />
+                  <DeleteChannelButton />
+                </div>
                 <div
                   className="str-chat__channel str-chat__container"
                   style={{ overflowY: "hidden" }}
@@ -137,7 +140,9 @@ const AdminSupport = () => {
                   <MessageList />
                   <MessageInput focus />
                 </div>
+                
               </div>
+              
             </Window>
           </Channel>
         </Chat>
@@ -155,6 +160,7 @@ const AdminSupport = () => {
     </div>
   );
 };
+
 
 const DeleteChannelButton = () => {
   const { channel } = useChannelStateContext();
