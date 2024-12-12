@@ -1,4 +1,3 @@
-// pages/checkin.tsx
 import { useState, useEffect } from 'react';
 import { db } from '../lib/firebaseConfig';
 import { collection, addDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
@@ -12,16 +11,14 @@ const CheckIn = () => {
   const [timeIn, setTimeIn] = useState('');
   const [timeOut, setTimeOut] = useState('');
 
-  // Fetch available benches and set current time on load
   useEffect(() => {
     fetchRoomData();
     setTimeIn(getCurrentTime());
   }, []);
 
-  // Function to get the current time in HH:MM format
   const getCurrentTime = () => {
     const now = new Date();
-    return now.toTimeString().slice(0, 5); // Format as HH:MM
+    return now.toTimeString().slice(0, 5);
   };
 
   const fetchRoomData = async () => {
@@ -33,8 +30,7 @@ const CheckIn = () => {
         const roomData = roomSnap.data();
         const allBenches = ['General', 'RF', 'Parametric', 'Assembly', 'Rework'];
         const benchesInUse = roomData.benchesInUse || [];
-        
-        // Filter available benches
+
         const filteredBenches = allBenches.filter((bench) => !benchesInUse.includes(bench));
         setAvailableBenches(filteredBenches);
       }
@@ -65,11 +61,9 @@ const CheckIn = () => {
     };
 
     try {
-      // Add check-in record to Firestore
       const checkInRef = collection(db, 'checkins');
       await addDoc(checkInRef, checkInData);
 
-      // Update room data to include new benches and occupancy
       const roomRef = doc(db, 'rooms', 'room');
       const roomSnap = await getDoc(roomRef);
 
@@ -78,7 +72,6 @@ const CheckIn = () => {
         const currentBenchesInUse = roomData.benchesInUse || [];
         const currentOccupancy = roomData.currentOccupancy || 0;
 
-        // Update benches in use and occupancy
         const updatedBenches = Array.from(new Set([...currentBenchesInUse, ...selectedBenches]));
         const updatedOccupancy = currentOccupancy + selectedBenches.length;
 
@@ -89,11 +82,15 @@ const CheckIn = () => {
       }
 
       alert('Check-in successful!');
-      router.push('/'); // Redirect to the main page after check-in
+      router.push('/');
     } catch (error) {
       console.error('Error logging check-in:', error);
       alert('Failed to log check-in. Please try again.');
     }
+  };
+
+  const handleBackToMainPage = () => {
+    router.push('/');
   };
 
   return (
@@ -121,7 +118,7 @@ const CheckIn = () => {
         <input
           type="time"
           value={timeIn}
-          onChange={(e) => setTimeIn(e.target.value)} // Allow user to change the time
+          onChange={(e) => setTimeIn(e.target.value)}
           className={styles.input}
         />
       </div>
@@ -135,8 +132,15 @@ const CheckIn = () => {
           className={styles.input}
         />
       </div>
+      <div style={{display:'flex', justifyContent:'space-between'}}>
+          <button onClick={handleSubmit} className={styles.submitButton}>
+            Submit Check-In
+          </button>
 
-      <button onClick={handleSubmit} className={styles.submitButton}>Submit Check-In</button>
+          <button onClick={handleBackToMainPage} className={styles.backButton}>
+            Back to Main Page
+          </button>
+      </div>
     </div>
   );
 };
